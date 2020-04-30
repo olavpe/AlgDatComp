@@ -1,14 +1,66 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
+\documentclass[11pt, a4paper, USenglish]{article} 
 
-\title{Algorithms and Data Structures Compendium}
-\author{olavlp }
-\date{July 2019}
+\usepackage{CompendiumStyle}
+\usepackage[utf8]{inputenc}
 
 \begin{document}
 
-\maketitle
+% Titlepage
+\title{Algorithms and Data Structures Compendium}
+\author{Olav Landmark Pedersen}
+\date{2018}
+\begin{titlepage}
+    \maketitle
+    \begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/logontnu_eng.pdf}
+    Department of Engineering Cybernetics
+    \end{figure}
+    \thispagestyle{empty}
+\end{titlepage}
 
-\section{Introduction}
+% TOC
+\newpage
+\tableofcontents
+\thispagestyle{empty} % Avoid page numbering on the table of contents.
+
+% Main content
+\newpage
+\setcounter{page}{1}
+\include{CourseContent}
+\include{Ch1_RoleAlgorithms}
+\include{Ch2_GettingStarted}
+\include{Ch3_GrowthOfFunctions}
+\include{Ch4_DivideAndConquer}
+\include{DynamicAndGreedy}
+\include{Graphs}
+\include{GraphTraversal}
+% \include{Ch6_Heapsort}
+% \include{Ch7_Quicksort}
+% \include{Ch8_SortingLinearTime}
+% \include{Ch9_MediansAndOrderStats}
+% \include{Ch10_ElementaryDataStructs}
+% \include{Ch11_HashTables}
+% \include{Ch12_BinarySearchTrees}
+% \include{Ch15_DynamicProgramming}
+% \include{Ch16_GreedyProgramming}
+% \include{Ch17_AmortizedAnalysis}
+% \include{Ch21_DataStrutsDisjointSets}
+% \include{Ch22_ElementaryGraphAlgo}
+% \include{Ch23_MinimumSpanningTrees}
+% \include{Ch24_SingleSourceShortestPath}
+% \include{Ch25_AllPairsShortestPath}
+% \include{Ch26_MaximumFlow}
+% \include{Ch34_NPCompleteness}
+% \include{Appendix}
+
+ % \input simply inserts the contents of the file, while \include forces a \newpage.
+% See \input vs. \include: http://tex.stackexchange.com/questions/246/when-should-i-use-input-vs-include
+
+% References
+\newpage
+\addcontentsline{toc}{section}{References}
+% \printbibliography{}
+\label{sec:bibliography}
 
 \end{document}

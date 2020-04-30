@@ -1,0 +1,137 @@
+\part{Graph Traversal}
+
+Notation!
+
+\begin{table}[h!]
+\centering
+ \begin{tabular}{||c c||} 
+ \hline
+ Term & Definition \\ [0.5ex] 
+ \hline\hline
+ G & Graph \\ 
+ V & Vertex \\
+ E & Edge \\
+ s & source (The node we are starting with)\\
+ u & parent or predecessor vertex\\
+ v & child or successor vertex\\
+ u.color & This is the color attribute of the node\\
+ u.d & This is the distance of the current node from the source\\
+ u.$\pi$ & This is predecessor node of the node $u$ \\
+ u.f & This records the \emph{time} in a DFS when the node has been blackend.\\
+ Q & The queue that nodes are loaded onto. \\ [1ex] 
+ \hline
+ \end{tabular}
+\end{table}
+
+Color scheme
+
+\begin{itemize}
+    \item All \textbf{black} and \textbf{grey} nodes have been discovered.
+    \item All \textbf{black} nodes have had all of their children nodes discovered. Note that all parent nodes, \emph{u}, are always black.
+    \item All \textbf{grey} nodes might potentially have undiscovered adjacent children nodes.
+\end{itemize}
+
+\section{General Graph Traversal}
+
+These graphs and functions are to be used on directed or undirected (or bidirectional) and non-weighted edges and are general principles for searching through these structures.
+
+\subsection{Breadth First Search (BFS)}
+
+Shortly put, it discovers all vertices at distance \emph{k} from \emph{s} before discovering vertices at distance $k+1$.
+This algorithm uses a queue to discover new nodes and unloads them as it goes.
+
+\subsection{Depth First Search (DFS)}
+
+This is complementary to the BFS as this algorithm adds children vertices to the stack and continues up the tree until it reaches a leaf vertex. When it cannot go further it backtracks and tries again, until it ultimately has searched the entire tree. 
+
+It keeps iterating down and turning vertices GRAY as it does. Each time the node is tuned gray the 'time' of discovery is set by 
+
+\begin{equation}
+    u.d = time
+\end{equation}
+
+When it it reaches the point of no return it turns the node BLACK and then records the time it was blackend by setting: 
+
+\begin{equation}
+    u.f = time
+\end{equation}
+
+As this was called recursively each node that was visited will be blackend and $u.f$ recorded recursively.
+
+\subsection{Topological sorting}
+
+Sorting a graph simply means that you want to ensure that a parent, $u$, comes before its child, $v$. There are two requirments for this is a DAG (Directed Acyclic Graph):
+
+\begin{itemize}
+    \item The vertices are directed
+    \item The graph is \emph{acyclic}. A graph is acyclic if it cannot get stuck in a cycle between parents and children.
+\end{itemize}
+
+\emph{DAG-shortest-path()} Uses DFS to traverse through the nodes and then uses the $u.f$ blackening times of all the nodes to sort the graph into a list. 
+
+\section{Minimal Spanning Trees}
+
+These algorithms are performed on undirected (or bidirectional) graphs that can be cyclic, and that are weighted. They need to be weighted for the algorithms to work.
+
+\subsection{Kruskal}
+
+Kruskal creates a minimum spanning tree of undirected graphs with weighted edges.
+The algorithm uses the edges to find a minimum spanning tree. It will go through all of the edges of nodes that are not connected. The run time for this algorithm is that of sorting the edges. It typically uses \textbf{merge sort} and therefore the compilation time will be the the time of merge sort on the edges $\mathcal{O}(E\log{E})$. 
+
+The algorithm sorts the edges $E$ by using Merge-sort. It will add the smallest weighted vertix to the minimum spanning tree. It will keep adding the smallest edge in the and add it to the minimum spanning tree, unless the two nodes the edges connect are already in the set of connected vertices. It continues this loop until all the nodes are in the set of connected nodes. 
+
+Kruskal is a greedy algorithm.
+
+\subsection{Prim's Algorithm}
+
+This algorithm basically uses BFS from a random node. It finds the smallest weighted edge that is connected to the set of connected nodes. It finds the smallest one that does not add a node that is already in the set, and adds it to the set.
+
+\section{Shortest Path Algorithms}
+
+The name is self explanatory, but these algorithms find the shortest path between nodes. These functions all use the $RELAX()$ function. This function will examine a parental node, child node, and a weight on the edge inbetween them. The single purpose the function is to update the $v.d$ if the current $v.d$ is higher than another parent $u.d$ and weight $w(u, v)$. 
+
+\begin{lstlisting}[mathescape=true]
+    Relax(u, v, w)
+    if v.d > u.d + w(u,v)
+        v.d = u.d + w(u,v)
+        v.$\pi$ = u
+\end{lstlisting}
+
+
+\subsection{Single Source Shortest Path (SSSP)}
+
+These types of problems exhibit \textbf{optimal substructure}. 
+
+\subsubsection{Bellman Ford}
+
+This function updates an array of node and the total weight needed to travel to the vertex.
+
+\begin{enumerate}
+    \item The array is initialized by setting all the weights to $\infty$.
+    \item It starts by iterating through this array. For each node it checks if the vertex has nodes that it can travel to. For each of those neighboring vertices it updates the weight using $RELAX()$.
+    \item It iterates through the index and updates/ $RELAX()$ at each step. 
+    \item It continues looping through this array until it cannot does not change any values through the array.
+\end{enumerate}
+
+It takes at most $V-1$ iterations. The compilation time takes $\mathcal{O}(|V|*|E|)$.
+Note that this algorithm can deal with negative weights as the final array can be offset by the lowest weight in the array and then sorted. 
+
+\subsection{Dijkstra}
+
+This functions is based on a BFS approach. It is important to note that for this algorithm there cannot be negative weights on the edges.
+
+\begin{enumerate}
+    \item It starts at the source node and relaxes all the adjacent vertices.
+    \item After they have have all been relaxed it goes to its set of visited nodes and finds adjacent nodes with the smallest weight and visits that node.
+    \item It relaxes all of that nodes neighboring weights and will then look at the node in the structure that is not in the set and will visit that node. (remember all unvisited vertices are $\infty$).
+    \item This continues until the nodes have ultimately finds all the vertices.
+\end{enumerate}
+
+Dijkstra's shortest path can be $\mathcal{O}(V^2)$. However, if a min-priority queue with a Fibonacci heap is used the algorithm can take: $\mathcal{O}(V\log{V}+E)$
+
+\subsection{DAG-Shortest-Path}
+
+If it can be used it is the most efficent algorithm. The name indicates the requirements DAG = Directed Acyclic Graph. 
+The algorithm topologically sorts the graph and then for each node in topological order, each of its children are relaxed. 
+
+This algorithm has a shortest run time of $\mathcal{O}(|V|+|E|)$

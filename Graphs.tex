@@ -1,0 +1,28 @@
+\section{Graphs}
+
+Graphs are made up of 
+\begin{itemize}
+    \item \bf{Vertices:} Nodes or the round dots
+    \item \bf{Edges:} the lines between vertices
+\end{itemize}
+
+A graph can either be \textbf{directed} or \textbf{undirected}. When making neighboring matrices or hashtabels, treat the row index as the source that the vertix point to. In undirected graphs the different just treat them like bidirectional graphs. This means that the neighbor matrices become symmetrical graphs. 
+
+\subsection{Binary search trees}
+
+a \emph{Successor} is the node with the smallest key, greater than the current node.
+In a graph this will be the neighboring smaller value. In a normal setting this will be the right most leaf node of the LEFT branch. 
+a \emph{Predecessor} is the node with the greatest key, smaller than the current node.
+In a graph this will be the neighboring larger value. 
+In a normal setting this will be the left most leaf node of the node on the RIGHT branch. 
+
+\subsection{Heaps}
+
+The way a heap is indexed in an array is that for a node $i$
+
+\begin{align}
+    \text{Left child} = 2i \\
+    \text{Right child} = 2i+1
+\end{align}
+
+\textbf{The Heap Property:} The heap must have all children nodes filled, except the highest vertices. 

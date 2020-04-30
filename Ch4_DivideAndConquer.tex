@@ -1,0 +1,141 @@
+\section{Divide-and-Conquer}
+
+Pensum:
+
+Læringsmål:
+
+\begin{itemize}
+    \item Chapters
+    \begin{todolist}
+        \item Kap. 2. Getting started: 2.3
+        \item Kap. 4. Divide-and-conquer
+            \begin{todolist}
+                \item Introduction
+                \item 4.1
+                \item 4.3
+                \item 4.4
+                \item 4.5
+            \end{todolist}
+        \item Kap. 7. Quicksort
+        \item Oppgaver 2.3-5 og 4.5-3 med løsning (binærsøk)
+            \begin{todolist}
+                \item 2.3
+                \item 2.4
+                \item 2.5
+                \item 4.5-3 (binary search)
+                \item Appendix B and C in the syllabus
+            \end{todolist}
+        \item Appendiks B og C i dette heftet
+    \end{todolist}
+        \item Goals 
+    \begin{todolist}
+        \item Forstå designmetoden divide-and-conquer (splitt og hersk)
+        \item Forstå maximum-subarray-problemet med løsninger
+        \item Forstå Bisect og Bisect 0 (se appendiks C i dette heftet)
+        \item Forstå Merge-Sort
+        \item Forstå Quicksort og Randomized-Quicksort
+        \item Kunne løse rekurrenser med substitusjon, rekursjonstrær og masterteoremet
+        \item Kunne løse rekurrenser med iterasjonsmetoden (se appendiks B i dette heftet)
+        \item Forstå hvordan variabelskifte fungerer
+    \end{todolist}
+\end{itemize}
+
+\subsection{What is Divide and Conquer}
+Just dividing the problem into subproblems. These subproblems should be the same as the main problem. They cannot be different problems as the main problem, but have to be broken down into smaller steps.   
+
+The implementation of these algorithms are recursive.   
+
+\begin{lstlisting}
+    DAC(P) {
+        if (small (P))
+            S(P)
+        else
+            divide P into P1, P2, P3,...Pk
+            Apply DAC(P1),DAC(P2),DAC(P2)
+            Combine(DAC(P1),DAC(P2),DAC(P2)) 
+       return output 
+    }
+\end{lstlisting}
+\vspace{5mm}
+ 
+\textbf{Functions that use Divide and Conquer}
+\begin{itemize}
+    \item Binary Search
+    \item Finding Maximum and Minimum
+    \item MergeSort
+    \item QuickSort 
+\end{itemize}
+
+\subsection{Reccurence methods}
+
+\subsubsection{Substitution}
+We guess a bound and then use mathematical induction to prove our guess correct.
+There are two steps:
+\begin{enumerate}
+    \item Guess the form of the solution
+    \item Use induction to find the constants and show that the solutions works
+\end{enumerate}
+
+After making a good guess of the run time $\mathbf{T()}$ for the function. Write it out it out mathematically, and set it into the recurrence.   
+Feks: \\  
+\begin{itemize}
+    \item With a recurrence such as  $T(n)= 2T([n/2])+n$  and you guess that the function has a run time of $O(n)$ then you would "convert" your run time guess into $cn\cdot \log(n)$ and sub it into in the recurrence and iterate through it. 
+    \item For the recurrence below the run time iteration that would be smart to start with would be:
+\end{itemize}
+\begin{align}
+     T([n/2]) &\leq c[n/2]\cdot \log([n/2]) \\
+     T(n)&\leq 2(c[n/2]\cdot \log([n/2]))+n \\
+     T(n)&\leq cn\cdot lg(n/2) + n \\
+    &.\\
+    &.\\
+    &.\\
+\end{align}
+
+Eventually you will get back to the runtime that you proposed and have therefore proven that the recurrence has your runtime.\\
+
+\emph{Changing Variables:} 
+Sometimes is might be beneficial to make a substitution of a variable feks. $m=lg (n)$ and then for the runtime as well: $S(m)= 2S(m/2)+m$. Making the induction easier.
+
+\subsubsection{Recursion-tree method}
+Converts the recurrence into a tree whose nodes represent the costs incurred at various levels of the recursion. We use techniques for bounding summations to solve the recurrence. 
+
+Start by ignoring the recursive call and put what is left over at the senter start of the tree. Feks. if your recurrence is
+\begin{equation}
+    T(n)= 2T([n/2])+4n
+\end{equation}
+Then the "root" of the tree would be $4n$. The number multiplied with $T(n)$, $2$, indicates how many iterations must be taken in the step below.
+In the next iteration (step below) at each nodes, the part of the recurrence that is not a recursive call, $4n$, is then subbed into the node. However instead of $n$ the level or the call/iteration is used instead. In this case it would be $n/2$.
+
+For each row make note of: 
+\begin{itemize}
+    \item Number of nodes
+    \item Sum of node values
+    \item Call or current iteration. 
+\end{itemize}
+
+The total numer of iterations of iterations would be the final form of the calls. In the example above it would be: $T(n/2^{i})$. To find out the number of iterations $i$, simply rearrange algebraically. 
+$$ i = \log_2(n) $$
+Number of iteration are used to calculate the total sum of all the row sum. 
+
+\noindent A good example:  \href{https://www.youtube.com/watch?v=sLNPd_nPGIc}{here}
+\vspace{5mm}
+
+\subsubsection{Master's Method}
+Provides bounds for currences of the form\\
+\begin{equation}
+    T(n) = aT(n/b)+ f(n) \qquad \text{  where  } a \geq 1,  b > 1
+\end{equation}
+Provides bounds for currences of the form
+\begin{equation}
+    T(n) = aT(n/b)+ f(n)
+\end{equation}
+where a $\geq$ 1, and b > 1. Then $T(n)$ has the asymptotic bounds:
+\begin{enumerate}
+    \item If $f(n) = O(n^{\log_b(a-\epsilon)})$ for some constant $\epsilon > 0$, then $T(n) = \Theta(n^{\log_b(a)})$ 
+    \item If $f(n) = \Theta(n^{\log_b(a)})$ , then $T(n) = \Theta(n^{\log_b(a)}\cdot \log(n))$
+    \item If $f(n) = \Omega(n^{\log_b(a+\epsilon)})$ for some constant $\epsilon > 0$, and if $af(n/b)\leq cf(n)$ for some constant $c<1$ then $T(n) = \Theta(f(n))$
+\end{enumerate}
+
+\subsection{Insertion Sort}
+This algorithm is one of the most straight forward and slowest sorting algorithms.
+It starts on the left of the algorith
